@@ -34,6 +34,16 @@ sonarqube:
     runAsNonRoot: true
     readOnlyRootFilesystem: false
 
+  # Disable system control init container for non-privileged environments
+  initSysctl:
+    enabled: false
+
+  # Init containers configuration
+  initContainers:
+    # Disable privileged init containers for security
+    sysctlVmMaxMapCount:
+      enabled: false
+
   # Ingress for production
   ingress:
     enabled: true

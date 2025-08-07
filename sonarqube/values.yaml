@@ -65,6 +65,16 @@ sonarqube:
     runAsGroup: 1000
     runAsNonRoot: true
 
+  # Disable system control init container for non-privileged environments
+  initSysctl:
+    enabled: false
+
+  # Init containers configuration
+  initContainers:
+    # Disable privileged init containers for security
+    sysctlVmMaxMapCount:
+      enabled: false
+
   # Database configuration
   jdbcOverwrite:
     enable: true

@@ -68,6 +68,16 @@ sonarqube:
     timeoutSeconds: 5
     failureThreshold: 6
 
+  # Disable system control init container for non-privileged environments
+  initSysctl:
+    enabled: false
+
+  # Init containers configuration
+  initContainers:
+    # Disable privileged init containers for security
+    sysctlVmMaxMapCount:
+      enabled: false
+
 # PostgreSQL configuration for development
 postgresql:
   enabled: true
