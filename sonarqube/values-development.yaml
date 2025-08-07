@@ -46,7 +46,7 @@ sonarqube:
     enable: true
     jdbcUrl: "jdbc:postgresql://sonarqube-postgresql:5432/sonarDB"
     jdbcUsername: "sonarUser"
-    jdbcSecretName: "sonarqube-postgresql-secret"
+    jdbcSecretName: "sonarqube-postgresql"
     jdbcSecretPasswordKey: "password"
 
   # Disable system control init container for non-privileged environments
@@ -92,9 +92,9 @@ sonarqube:
 postgresql:
   enabled: true
   
-  # Override the name to avoid conflicts
+  # Override the name to avoid conflicts with SonarQube naming  
+  nameOverride: "postgresql"
   fullnameOverride: "sonarqube-postgresql"
-  nameOverride: "sonarqube-postgresql"
   
   # Simple authentication for development
   auth:
@@ -102,8 +102,6 @@ postgresql:
     username: "sonarUser"
     password: "sonarPass"
     database: "sonarDB"
-    # Use a specific secret name to avoid conflicts
-    secretName: "sonarqube-postgresql-secret"
 
   # Reduced resources for development
   primary:

@@ -80,7 +80,7 @@ sonarqube:
     enable: true
     jdbcUrl: "jdbc:postgresql://sonarqube-postgresql:5432/sonarDB"
     jdbcUsername: "sonarUser"
-    jdbcSecretName: "sonarqube-postgresql-secret"
+    jdbcSecretName: "sonarqube-postgresql"
     jdbcSecretPasswordKey: "password"
 
   # Plugins configuration
@@ -127,9 +127,9 @@ sonarqube:
 postgresql:
   enabled: true
   
-  # Override the name to avoid conflicts
+  # Override the name to avoid conflicts with SonarQube naming
+  nameOverride: "postgresql"
   fullnameOverride: "sonarqube-postgresql"
-  nameOverride: "sonarqube-postgresql"
   
   # PostgreSQL authentication
   auth:
@@ -137,8 +137,6 @@ postgresql:
     username: "sonarUser"
     password: "sonarPass123"  # Change in production!
     database: "sonarDB"
-    # Use a specific secret name to avoid conflicts
-    secretName: "sonarqube-postgresql-secret"
 
   # PostgreSQL primary configuration
   primary:
