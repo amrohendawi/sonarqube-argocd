@@ -117,11 +117,12 @@ sonarqube:
     failureThreshold: 6
 
   # Environment variables
-  env:
-    - name: "SONAR_WEB_JAVAADDITIONALOPTS"
-      value: "-javaagent:./extensions/plugins/sonarqube-community-branch-plugin.jar=web"
-    - name: "SONAR_CE_JAVAADDITIONALOPTS"
-      value: "-javaagent:./extensions/plugins/sonarqube-community-branch-plugin.jar=ce"
+  env: []
+  # Uncomment and configure if you need the community branch plugin
+  # - name: "SONAR_WEB_JAVAADDITIONALOPTS"
+  #   value: "-javaagent:./extensions/plugins/sonarqube-community-branch-plugin.jar=web"
+  # - name: "SONAR_CE_JAVAADDITIONALOPTS"
+  #   value: "-javaagent:./extensions/plugins/sonarqube-community-branch-plugin.jar=ce"
 
 # PostgreSQL configuration (bundled database)
 postgresql:
