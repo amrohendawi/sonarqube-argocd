@@ -89,10 +89,13 @@ sonarqube:
     # Example plugins:
     # - "https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.14.0/sonarqube-community-branch-plugin-1.14.0.jar"
 
-  # Admin credentials (use secrets in production)
+  # Admin credentials (use secrets for production)
   account:
-    adminPassword: "admin123"  # Change this in production!
-    currentAdminPassword: "admin"
+    # Use secrets instead of plain text
+    adminPasswordSecretName: "sonarqube-admin-secret"
+    adminPasswordSecretKey: "admin-password"
+    currentAdminPasswordSecretName: "sonarqube-admin-secret"
+    currentAdminPasswordSecretKey: "current-admin-password"
 
   # Elasticsearch configuration
   searchNodes: "1"
