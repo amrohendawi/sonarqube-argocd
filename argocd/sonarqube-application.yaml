@@ -22,9 +22,6 @@ spec:
     helm:
       valueFiles:
         - values.yaml
-      parameters:
-        - name: "sonarqube.account.adminPassword"
-          value: "$ARGOCD_APP_SOURCE_TARGET_REVISION"  # Use ArgoCD's built-in variable or replace with your secret
       
   destination:
     server: 'https://kubernetes.default.svc'
