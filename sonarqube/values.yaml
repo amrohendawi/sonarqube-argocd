@@ -91,13 +91,8 @@ sonarqube:
 
   # Admin credentials (use secrets for production)
   account:
-    # Use secrets instead of plain text
-    adminPasswordSecretName: "sonarqube-admin-secret"
-    adminPasswordSecretKey: "admin-password"
-    currentAdminPasswordSecretName: "sonarqube-admin-secret"
-    currentAdminPasswordSecretKey: "current-admin-password"
-
-  # Elasticsearch configuration
+    adminPassword: "admin123"  # This will be the new password
+    currentAdminPassword: "HEAD"  # This is the current password that works  # Elasticsearch configuration
   searchNodes: "1"
 
   # Startup and liveness probes
