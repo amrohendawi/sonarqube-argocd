@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  labels:
+    app.kubernetes.io/name: sonarqube
+    app.kubernetes.io/component: code-quality
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  
+  source:
+    # Replace this with your actual Git repository URL
+    repoURL: 'https://github.com/amrohendawi/sonarqube-argocd.git'
+    targetRevision: HEAD
+    path: 'sonarqube'
+    
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: "sonarqube.account.adminPassword"
+          value: "$ARGOCD_APP_SOURCE_TARGET_REVISION"  # Use ArgoCD's built-in variable or replace with your secret
+      
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: sonarqube
+    
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  # Health checks
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+  
+  # Revision history limit
+  revisionHistoryLimit: 3

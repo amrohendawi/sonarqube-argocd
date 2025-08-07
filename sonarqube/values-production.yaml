@@ -1,0 +1,117 @@
+# Production Values Override for SonarQube
+# Use this file for production deployment with enhanced security and performance
+
+# SonarQube configuration for production
+sonarqube:
+  # Resource configuration - increased for production
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 8Gi
+    requests:
+      cpu: 2000m
+      memory: 4Gi
+
+  # JVM Options for production
+  jvmOpts: "-Xmx6G -Xms2G -XX:+UseG1GC -XX:MaxGCPauseMillis=200"
+  jvmCeOpts: "-Xmx6G -Xms2G -XX:+UseG1GC"
+
+  # Persistence configuration
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 50Gi
+    storageClass: "gp2"  # Use appropriate storage class for your cloud provider
+
+  # High availability for compute engine
+  searchNodes: "2"
+
+  # Security context
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  # Ingress for production
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/proxy-body-size: "64m"
+    hosts:
+      - host: sonarqube.yourdomain.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: sonarqube-tls
+        hosts:
+          - sonarqube.yourdomain.com
+
+  # Admin credentials should come from secrets in production
+  account:
+    adminPasswordSecretName: "sonarqube-admin-secret"
+    adminPasswordSecretKey: "admin-password"
+    currentAdminPasswordSecretName: "sonarqube-admin-secret"
+    currentAdminPasswordSecretKey: "current-admin-password"
+
+# PostgreSQL configuration for production
+postgresql:
+  enabled: true
+  
+  # Use external secret for authentication
+  auth:
+    existingSecret: "sonarqube-postgres-secret"
+    secretKeys:
+      adminPasswordKey: "postgres-password"
+      userPasswordKey: "password"
+    username: "sonarUser"
+    database: "sonarDB"
+
+  # Primary configuration with HA considerations
+  primary:
+    persistence:
+      enabled: true
+      size: 100Gi
+      storageClass: "gp2"  # Use appropriate storage class
+    
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+      requests:
+        cpu: 1000m
+        memory: 1Gi
+    
+    # PostgreSQL configuration
+    extendedConfiguration: |
+      shared_preload_libraries = 'pg_stat_statements'
+      pg_stat_statements.max = 10000
+      pg_stat_statements.track = all
+      max_connections = 200
+      shared_buffers = 256MB
+      effective_cache_size = 1GB
+      maintenance_work_mem = 64MB
+      checkpoint_completion_target = 0.9
+      wal_buffers = 16MB
+      default_statistics_target = 100
+
+# Network Policies for security
+networkPolicy:
+  enabled: true
+
+# Pod Disruption Budget for high availability
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+# Service Monitor for Prometheus monitoring
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+  interval: 30s

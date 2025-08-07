@@ -1,0 +1,61 @@
+# Sensitive files - never commit these!
+**/secrets.yaml
+**/secret.yaml
+**/*secret*.yaml
+**/*password*.yaml
+**/*credentials*.yaml
+
+# Backup files
+*.sql
+backup/
+backups/
+
+# Helm generated files
+charts/
+Chart.lock
+
+# Local development files
+.env
+.env.local
+*.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Logs
+*.log
+logs/
+
+# kubectl output files
+kubectl-output.yaml
+
+# Terraform files (if used)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Helm dependencies
+charts/
+*.tgz
+
+# ArgoCD temporary files
+argocd-*.yaml.tmp

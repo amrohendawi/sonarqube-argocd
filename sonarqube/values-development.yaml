@@ -1,0 +1,99 @@
+# Development Values Override for SonarQube
+# Use this file for development/testing environments
+
+# SonarQube configuration for development
+sonarqube:
+  # Reduced resources for development
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 500m
+      memory: 1Gi
+
+  # JVM Options for development
+  jvmOpts: "-Xmx1G -Xms512m"
+  jvmCeOpts: "-Xmx1G -Xms512m"
+
+  # Persistence configuration - smaller for dev
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    # Use default storage class for dev
+
+  # Single search node for dev
+  searchNodes: "1"
+
+  # Service configuration - NodePort for easy access
+  service:
+    type: NodePort
+    externalPort: 9000
+    internalPort: 9000
+
+  # Disable ingress for development (use port-forward or NodePort)
+  ingress:
+    enabled: false
+
+  # Simple admin credentials for dev (not secure!)
+  account:
+    adminPassword: "admin"
+    currentAdminPassword: "admin"
+
+  # Relaxed probes for development
+  startupProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    failureThreshold: 60
+    timeoutSeconds: 5
+
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 6
+
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 6
+
+# PostgreSQL configuration for development
+postgresql:
+  enabled: true
+  
+  # Simple authentication for development
+  auth:
+    postgresPassword: "postgres"
+    username: "sonarUser"
+    password: "sonarPass"
+    database: "sonarDB"
+
+  # Reduced resources for development
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+      # Use default storage class for dev
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+# Disable network policies for easier development
+networkPolicy:
+  enabled: false
+
+# Pod Disruption Budget not needed for dev
+podDisruptionBudget:
+  enabled: false
+
+# No monitoring in development
+serviceMonitor:
+  enabled: false
