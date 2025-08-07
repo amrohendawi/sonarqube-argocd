@@ -65,6 +65,14 @@ sonarqube:
     runAsGroup: 1000
     runAsNonRoot: true
 
+  # Database configuration
+  jdbcOverwrite:
+    enable: true
+    jdbcUrl: "jdbc:postgresql://sonarqube-postgresql:5432/sonarDB"
+    jdbcUsername: "sonarUser"
+    jdbcSecretName: "sonarqube-postgresql-secret"
+    jdbcSecretPasswordKey: "password"
+
   # Plugins configuration
   plugins:
     install: []
@@ -109,12 +117,18 @@ sonarqube:
 postgresql:
   enabled: true
   
+  # Override the name to avoid conflicts
+  fullnameOverride: "sonarqube-postgresql"
+  nameOverride: "sonarqube-postgresql"
+  
   # PostgreSQL authentication
   auth:
     postgresPassword: "postgres123"  # Change in production!
     username: "sonarUser"
     password: "sonarPass123"  # Change in production!
     database: "sonarDB"
+    # Use a specific secret name to avoid conflicts
+    secretName: "sonarqube-postgresql-secret"
 
   # PostgreSQL primary configuration
   primary:

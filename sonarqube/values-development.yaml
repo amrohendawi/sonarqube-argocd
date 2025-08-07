@@ -41,6 +41,14 @@ sonarqube:
     adminPassword: "admin"
     currentAdminPassword: "admin"
 
+  # Database configuration
+  jdbcOverwrite:
+    enable: true
+    jdbcUrl: "jdbc:postgresql://sonarqube-postgresql:5432/sonarDB"
+    jdbcUsername: "sonarUser"
+    jdbcSecretName: "sonarqube-postgresql-secret"
+    jdbcSecretPasswordKey: "password"
+
   # Relaxed probes for development
   startupProbe:
     initialDelaySeconds: 60
@@ -64,12 +72,18 @@ sonarqube:
 postgresql:
   enabled: true
   
+  # Override the name to avoid conflicts
+  fullnameOverride: "sonarqube-postgresql"
+  nameOverride: "sonarqube-postgresql"
+  
   # Simple authentication for development
   auth:
     postgresPassword: "postgres"
     username: "sonarUser"
     password: "sonarPass"
     database: "sonarDB"
+    # Use a specific secret name to avoid conflicts
+    secretName: "sonarqube-postgresql-secret"
 
   # Reduced resources for development
   primary:

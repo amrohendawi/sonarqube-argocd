@@ -60,9 +60,21 @@ sonarqube:
     currentAdminPasswordSecretName: "sonarqube-admin-secret"
     currentAdminPasswordSecretKey: "current-admin-password"
 
+  # Database configuration
+  jdbcOverwrite:
+    enable: true
+    jdbcUrl: "jdbc:postgresql://sonarqube-postgresql:5432/sonarDB"
+    jdbcUsername: "sonarUser"
+    jdbcSecretName: "sonarqube-postgres-secret"
+    jdbcSecretPasswordKey: "password"
+
 # PostgreSQL configuration for production
 postgresql:
   enabled: true
+  
+  # Override the name to avoid conflicts
+  fullnameOverride: "sonarqube-postgresql"
+  nameOverride: "sonarqube-postgresql"
   
   # Use external secret for authentication
   auth:
@@ -72,6 +84,8 @@ postgresql:
       userPasswordKey: "password"
     username: "sonarUser"
     database: "sonarDB"
+    # Use a specific secret name to avoid conflicts
+    secretName: "sonarqube-postgresql-secret"
 
   # Primary configuration with HA considerations
   primary:
