@@ -49,6 +49,16 @@ sonarqube:
     jdbcSecretName: "sonarqube-postgresql-secret"
     jdbcSecretPasswordKey: "password"
 
+  # Disable system control init container for non-privileged environments
+  initSysctl:
+    enabled: false
+
+  # Init containers configuration
+  initContainers:
+    # Disable privileged init containers for security
+    sysctlVmMaxMapCount:
+      enabled: false
+
   # Relaxed probes for development
   startupProbe:
     initialDelaySeconds: 60
